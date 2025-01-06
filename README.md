@@ -67,7 +67,7 @@ This just tells qgis that this "world" is at 1,-1, this prevents the contours fr
 
 With the heightmap layer selected in qgis, you go to Raster -> Extraction -> Contour.
 
-Default values are fine as is, you should test which "Interval between contour lines" fits best for your landscape, by setting the "Layer Style" of your heightmap to contour. For Yehorivka
+Default values are fine as is, you should test which "Interval between contour lines" fits best for your landscape, by setting the "Layer Style" of your heightmap to contour. For Yehorivka I used 50.
 
 From here on you can follow this tutorial by "Geospatial School": [Tutorial](https://www.youtube.com/watch?v=0oyZ0gwLKXY)
 
