@@ -35,7 +35,6 @@ As of now, the following maps are in progress (I plan to do all 23):
 - **Anvil**
 - **Lashkar Valley**
 
-*(Feel free to suggest additional maps for inclusion!)*
 
 ---
 
@@ -47,6 +46,49 @@ These maps are made available for **personal, non-commercial use only**. Please 
 - You may download and use these maps for personal reference or enjoyment.
 - Commercial use, redistribution, or modification of these maps is strictly prohibited.
 - If you wish to share these maps, please provide a link to this repository rather than redistributing them directly.
+
+---
+
+## Getting contour labels for fictional maps using QGIS
+
+First you need to create a .wld file with the same name, for the heightmap used in qgis.
+
+So for this I had `Yehorivka-heightmap.png` and `Yehorivka-heightmap.wld` with content: 
+```
+1
+0
+0
+-1
+0
+0
+```
+This just tells qgis that this "world" is at 1,-1, this prevents the contours from flipping later.
+*This is required for generated heightmaps that have no geospatial data. Apparently you can attach a CRS but I had minimal success.*
+
+With the heightmap layer selected in qgis, you go to Raster -> Extraction -> Contour.
+
+Default values are fine as is, you should test which "Interval between contour lines" fits best for your landscape, by setting the "Layer Style" of your heightmap to contour. For Yehorivka
+
+From here on you can follow this tutorial by "Geospatial School": [Tutorial](https://www.youtube.com/watch?v=0oyZ0gwLKXY)
+
+I used the following field calculations for *Yehorivka* for context:
+
+### elevation
+To get the correct elevation labels, I used two actors placed in *Yehorivka* in the *Squad* SDK, and used those two values to get the total elevation in meters from *Yehorivka*, which is 161 meters.
+Since QGIS output the ELEV attribute ranging from 250 - 5850, you can remap the values to a new elevation value by doing:
+
+`UE4 Height Range / QGIS Height Range` --> `160/5600` = 0.028
+
+You can also use this value as the z-factor for the hillshading layer style, seems to fit nicely!
+
+`floor("ELEV"*0.028+60)-1` the +60 is the MSL (Mean Sea Level). Since we don't have actual MSL values, I just asked ChatGPT to generate some close approximations based on geographical similarities. 
+
+Keep following the tutorial with the new `elevation` variable used, instead of `ELEV`
+
+### index
+I used a 5 meter scale for each index line, since *Yehorivka* is fairly flat.
+
+`if("elevation"%5=0,1,NULL)` 
 
 ---
 
