@@ -51,9 +51,10 @@ These maps are made available for **personal, non-commercial use only**. Please 
 
 ## Getting contour labels for fictional maps using QGIS
 
-First you need to create a .wld file with the same name, for the heightmap used in qgis.
+First, you need to create a .wld file with the same name as the heightmap used in QGIS.
 
-So for this I had `Yehorivka-heightmap.png` and `Yehorivka-heightmap.wld` with content: 
+For example, if you have Yehorivka-heightmap.png, you should create a Yehorivka-heightmap.wld file with the following content:
+
 ```
 1
 0
@@ -62,33 +63,40 @@ So for this I had `Yehorivka-heightmap.png` and `Yehorivka-heightmap.wld` with c
 0
 0
 ```
-This just tells qgis that this "world" is at 1,-1, this prevents the contours from flipping later.
-*This is required for generated heightmaps that have no geospatial data. Apparently you can attach a CRS but I had minimal success.*
 
-With the heightmap layer selected in qgis, you go to Raster -> Extraction -> Contour.
+This tells QGIS that the "world" coordinates are at 1, -1, which prevents the contours from flipping later. This is required for generated heightmaps that have no geospatial data. While you can attach a CRS, I had minimal success with this approach.
 
-Default values are fine as is, you should test which "Interval between contour lines" fits best for your landscape, by setting the "Layer Style" of your heightmap to contour. For Yehorivka I used 50.
+With the heightmap layer selected in QGIS, go to Raster -> Extraction -> Contour.
 
-From here on you can follow this tutorial by "Geospatial School": [Tutorial](https://www.youtube.com/watch?v=0oyZ0gwLKXY)
+Default values are generally fine, but you should test which "Interval between contour lines" fits best for your landscape by setting the "Layer Style" of your heightmap to contour. For Yehorivka, I used an interval of 50.
 
-I used the following field calculations for *Yehorivka* for context:
+You can follow this tutorial by "Geospatial School": [Tutorial](https://www.youtube.com/watch?v=0oyZ0gwLKXY)
 
-### elevation
-To get the correct elevation labels, I used two actors placed in *Yehorivka* in the *Squad* SDK, and used those two values to get the total elevation in meters from *Yehorivka*, which is 161 meters.
-Since QGIS output the ELEV attribute ranging from 250 - 5850, you can remap the values to a new elevation value by doing:
+For the context of Yehorivka, I used the following field calculations:
 
-`UE4 Height Range / QGIS Height Range` --> `160/5600` = 0.028
+### Elevation
+To get the correct elevation labels, I placed two actors in Yehorivka in the Squad SDK and used their values to determine the total elevation, which is 161 meters.
 
-You can also use this value as the z-factor for the hillshading layer style, seems to fit nicely!
+Since QGIS output the ELEV attribute ranging from 250 to 5850, you can remap these values to new elevation values by using:
 
-`floor("ELEV"*0.028+60)-1` the +60 is the MSL (Mean Sea Level). Since we don't have actual MSL values, I just asked ChatGPT to generate some close approximations based on geographical similarities. 
+UE4 Height Range / QGIS Height Range --> 160/5600 = 0.028
 
-Keep following the tutorial with the new `elevation` variable used, instead of `ELEV`
+You can also use this value as the z-factor for the hillshading layer style, which looks nice!
 
-### index
-I used a 5 meter scale for each index line, since *Yehorivka* is fairly flat.
+The calculation for the new elevation variable is:
 
-`if("elevation"%5=0,1,NULL)` 
+`floor("ELEV" * 0.028 + 60) - 1` 
+
+The +60 is the Mean Sea Level (MSL). Since actual MSL values are not available, I used close approximations based on geographical similarities suggested by ChatGPT.
+
+Continue following the tutorial with the new elevation variable instead of ELEV.
+
+### Index
+For Yehorivka, which is fairly flat, I used a 5-meter scale for each index line.
+
+The calculation is:
+
+`if("elevation"%5=0,1,NULL)`
 
 ---
 
