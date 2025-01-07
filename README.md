@@ -10,6 +10,7 @@ Here’s an overview of the process used to create these maps:
 
 1. **Extracting Map Data**
    - Using the *Squad* SDK to gather essential data, including heightmaps, map resolution, scale, size, and features.
+   - Using Blueprint functions to extract road, building, forests and other features, for later use as masks.
    - Analyzing in-game features such as roads, rivers, buildings, forests, and terrain types for accurate placement.
 
 2. **Generating Base Layers in QGIS**
